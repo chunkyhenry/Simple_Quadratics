@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Simple Quadratics</title>
+	<link rel="icon" href="icon.png">
+	<script type="text/javascript">var a,b,c,context,w,h,k=28;
+function init() {
+	k=28;
+	canvas = document.getElementById("mycanvas");
+	context = canvas.getContext("2d");
+	w = canvas.width = 560;
+	h = canvas.height = 560;
+	$("#answers").hide();
+	$("#control").hide();
+	grid();
+}
+
+function eval() {
+	xv = $("#xval").val();
+	yv = a*Math.pow(xv,2)+b*xv+c*1;
+	$(".yval").text("Point for X = "+ xv +" is at" + " (" + xv +","+yv+")");
+	context.beginPath();
+	context.strokeStyle = "pink";
+	context.fillStyle = "pink";
+	context.arc((w/2)+xv,(h/2)+yv-c*k,6,0,2*Math.PI);
+	context.fill();
+}
+
+function plotYint() {
+	context.beginPath();
+	context.strokeStyle = "blue";
+	context.fillStyle = "blue";
+	context.arc(w/2,(h/2)-c*k,6,0,2*Math.PI);
+	context.fill();
+}
+
+function plotXint() {
+	context.beginPath();
+	context.strokeStyle = "red";
+	context.fillStyle = "red";
+	context.arc(w/2+x1*k,h/2,6,0,2*Math.PI);
+	context.arc(w/2+x2*k,h/2,6,0,2*Math.PI);
+	context.fill();
+}
+
+function plotVertex() {
+	context.beginPath();
+	context.strokeStyle = "green";
+	context.fillStyle = "green";
+	context.arc(w/2+vX*k,h/2-vY*k,6,0,2*Math.PI);
+	context.fill();
+}
+
+function plotSymline() {
+	context.lineWidth=5;
+	context.beginPath();
+	context.strokeStyle = "orange";
+	context.setLineDash([5,10]);
+	context.moveTo(w/2+vX*k,h/2-vY*k);
+	context.lineTo(w/2+vX*k,h);
+	context.moveTo(w/2+vX*k,h/2-vY*k);
+	context.lineTo(w/2+vX*k,0);
+	context.stroke();
+	context.setLineDash([]);
+}
+
+function graphQuad () {
+	for (var i = 0; i < w; i++) {
+	x = (w/2-i)/k;
+	y = c*1+b*x+a*Math.pow(x,2);
+	nx =(w/2-(i+1))/k;
+	ny = c*1+b*nx+a*Math.pow(nx,2);
+	context.beginPath();
+	context.lineWidth = 2;
+	context.strokeStyle = "black";
+	context.moveTo(w/2+x*k, h/2-y*k);
+	context.lineTo(w/2+nx*k, h/2-ny*k);
+	context.stroke();
+};
+};
+
+
+function sizeUp() {
+	k-=5;
+	if (k<=0){k=20}
+	context.clearRect(0,0,w,h);
+	grid();
+	graphQuad();
+	return false;
+}
+
+function sizeDown() {
+	k+=5;
+	context.clearRect(0,0,w,h);
+	grid();
+	graphQuad();
+	return false;
+}
+
+function QF() {
+// getting values to do quadratic formula
+a = $("#quadA").val();
+b = $("#linB").val();
+c = $("#constant").val();
+solutions();
+graphQuad();
+
+}
+
+function solutions() {
+// qudratic formula
+$("#answers").hide();
+$("#answers").fadeIn(1000);
+$("#control").hide();
+$("#control").fadeIn(1000);
+D = Math.pow(b*1,2)-4*a*c;
+if (D<0) {
+	$(".solution1").text("The solutions are non-real (no x-intercepts).");
+	results();
+}
+else {
+	x1 = -(b*1)/(2*a)+Math.sqrt(D)/(2*a);
+	x2 = -(b*1)/(2*a)-Math.sqrt(D)/(2*a);
+	$(".solution1").text("X zero one = " + x1);
+	$(".solution2").text("X zero two = " + x2);
+	results();
+}
+} //close solutions
+
+function results () {
+// finding vertext and displaying symline and yint results
+vX = -(b*1)/(2*a);
+vY = a*Math.pow(vX,2)+b*vX+c*1;
+$(".symline").text("Line of symetry at X = " + vX);
+$(".discriminant").text("Discriminant is " + D);
+$(".vertex").text("Vertex is at (" + vX+","+vY+")");
+$(".yInt").text("Y intercept is at (" + 0+","+c+")");
+}//close resluts()
+
+function grid() {
+//using the direct variation constant k, we make a grid.
+context.lineWidth=1;
+context.strokeStyle="rgba(0,0,0,.4)";
+for (var i=0; i<w/(2*k); i++) { //vertical grid
+context.beginPath();
+context.moveTo(w/2+k*(i+1),0);
+context.lineTo(w/2+k*(i+1),h);
+context.stroke();
+context.beginPath();
+context.moveTo(w/2-k*(i+1),0);
+context.lineTo(w/2-k*(i+1),h);
+context.stroke();
+};
+for (var i=0; i<h/(2*k); i++) { //horizontal grid
+context.beginPath();
+context.moveTo(0,w/2+k*(i+1));
+context.lineTo(w,w/2+k*(i+1));
+context.stroke();
+context.beginPath();
+context.moveTo(0,w/2-k*(i+1));
+context.lineTo(w,w/2-k*(i+1));
+context.stroke();
+};
+//x axis
+context.lineWidth=2;
+context.beginPath();
+context.moveTo(0,h/2);
+context.lineTo(w,h/2);
+context.stroke();
+//y axis
+context.beginPath();
+context.moveTo(w/2,0);
+context.lineTo(w/2,h);
+context.stroke();
+// x and y axis
+context.lineWidth=3;
+context.strokeStyle="rgba(0,0,0,.9)";
+}</script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<style type="text/css">
+	html, body {
+		margin: 0px;
+	}	
+	canvas {
+		display: block;
+	}
+	#wrapper {
+		width: 1200px;
+		height:643px;
+		margin:auto;
+		background-color: #696cd6;
+	}
+
+	.myButton {
+		-moz-box-shadow: 0px 0px 0px 2px #9fb4f2;
+		-webkit-box-shadow: 0px 0px 0px 2px #9fb4f2;
+		box-shadow: 0px 0px 0px 2px #9fb4f2;
+		background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #7892c2), color-stop(1, #476e9e));
+		background:-moz-linear-gradient(top, #7892c2 5%, #476e9e 100%);
+		background:-webkit-linear-gradient(top, #7892c2 5%, #476e9e 100%);
+		background:-o-linear-gradient(top, #7892c2 5%, #476e9e 100%);
+		background:-ms-linear-gradient(top, #7892c2 5%, #476e9e 100%);
+		background:linear-gradient(to bottom, #7892c2 5%, #476e9e 100%);
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#7892c2', endColorstr='#476e9e',GradientType=0);
+		background-color:#7892c2;
+		-moz-border-radius:10px;
+		-webkit-border-radius:10px;
+		border-radius:10px;
+		border:1px solid #4e6096;
+		display:inline-block;
+		cursor:pointer;
+		color:#ffffff;
+		font-family:Arial;
+		font-size:19px;
+		padding:12px 37px;
+		text-decoration:none;
+		text-shadow:0px 1px 0px #283966;
+	}
+	.myButton:hover {
+		background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #476e9e), color-stop(1, #7892c2));
+		background:-moz-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+		background:-webkit-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+		background:-o-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+		background:-ms-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+		background:linear-gradient(to bottom, #476e9e 5%, #7892c2 100%);
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#476e9e', endColorstr='#7892c2',GradientType=0);
+		background-color:#476e9e;
+	}
+	.myButton:active {
+		position:relative;
+		top:1px;
+	}
+
+
+	header {
+		width: 1000px;
+		height:30px;
+		font-size:21px;
+		margin-left: auto;
+		margin-right: auto;
+		background-color: #312D3B;
+		text-align: center;
+		color: white;
+		border-radius:5px;
+	}
+
+	#mycanvas {
+		margin-top:15px;
+		margin-left:400px;
+		border-style:double;
+		border-width:4px;
+		border-radius:5px;
+		width:560px;
+		height:560px;
+		background-color:white;
+	}
+
+	#zoom {
+		margin-left:71.5%;
+		margin-top: 5px;
+		float: right;
+		width: 145px;
+		position: absolute;
+		color:white;
+		background-color: #312D3B;
+		padding: 10px;
+		border-radius: 20px;
+	}
+
+	#control {
+		margin-left:71.5%;
+		margin-top: 225px;
+		float: right;
+		width: 145px;
+		position: absolute;
+		color:white;
+		background-color: #312D3B;
+		padding: 10px;
+		border-radius: 20px;
+	}
+
+	#coeff {
+		margin-left:5%;
+		margin-top: 5px;
+		float: left;
+		width: 300px;
+		position: absolute;
+		color:white;
+		background-color: #312D3B;
+		padding: 10px;
+		border-radius: 20px;
+
+	}
+
+	#answers {
+		margin-left:5%;
+		margin-top: 305px;
+		float: left;
+		width: 300px;
+		background-color: #312D3B;
+		color:white;
+		position: absolute;
+		padding: 10px;
+		border-radius: 20px;
+	}
+
+	input {
+		padding: 10px;
+		border: solid 1px #fff;
+		box-shadow: inset 1px 1px 2px 0 #707070;
+		transition: box-shadow 0.3s;
+	}
+	input:focus,
+	input.focus {
+		box-shadow: inset 1px 1px 2px 0 #c9c9c9;
+		box-shadow: 0 0 5px 1px #969696;
+	}
+
+	</style>
+</head>
+
+<body onload="init()">
+	<div id="wrapper">
+		<header>Simple Quadratics - Duncan Clark</header>
+		<div id="coeff">
+			<p class="formInfo">Enter coefficients (ax^2+bx+c)<br>
+				<p></p>
+				a = <input size="10" type="text" id="quadA" value="1"> <br>
+				<p></p>
+				b = <input size="10" type="text" id="linB" value="0"> <br>
+				<p></p>
+				c = <input size="10" type="text" id="constant" value="0"> <br>
+				<p></p>
+				<button class="myButton" onclick="QF()">Submit Values</button></p>
+			</div>
+			<div id="zoom">
+				<button class="myButton" onclick="sizeUp()">Zoom out</button></p>
+				<button class="myButton" onclick="sizeDown()">Zoom in</button></p>
+				<button class="myButton" onclick="init()">Clear</button>
+			</div>
+			<div id="control">
+				<button class="myButton" onclick="plotYint()">Yint</button></p>
+				<button class="myButton" onclick="plotXint()">Xint</button></p>
+				<button class="myButton" onclick="plotVertex()">Vertex</button></p>
+				<button class="myButton" onclick="plotSymline()">Symline</button></p>
+				x = <input size="5" type="text" id="xval" value="0"></p>
+				<button class="myButton" onclick="eval()">Input X</button>
+			</div>
+			<div id="answers">
+				<p class="vertex"></p>
+				<p class="discriminant"></p>
+				<p class="solution1"></p>
+				<p class="solution2"></p>
+				<p class="yInt"></p>
+				<p class="symline"></p>
+				<p class="yval"></p>
+			</div>
+			<canvas id="mycanvas"></canvas>
+		</div>
+	</body>
+	</html>
